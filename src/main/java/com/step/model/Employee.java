@@ -26,6 +26,15 @@ public class Employee implements Serializable {
     @Column(precision = 6, scale = 2)
     private Double salary; // 145.32
 
+    public Employee() {
+    }
+
+    public Employee(String name, String surname, LocalDate birthdate) {
+        this.name = name;
+        this.surname = surname;
+        this.birthdate = birthdate;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -64,5 +73,16 @@ public class Employee implements Serializable {
 
     public void setSalary(Double salary) {
         this.salary = salary;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", birthdate=" + birthdate +
+                ", salary=" + salary +
+                '}';
     }
 }

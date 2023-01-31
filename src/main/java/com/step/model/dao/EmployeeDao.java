@@ -1,6 +1,7 @@
-package com.step.model;
+package com.step.model.dao;
 
 import com.step.hibernate.HibernateUtil;
+import com.step.model.Employee;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -14,7 +15,7 @@ public class EmployeeDao {
     public List<Employee> findAll() {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.beginTransaction();
-        Query<Employee> query = (Query<Employee>) session.createQuery("FROM Employee");
+        Query<Employee> query = session.createQuery("FROM Employee", Employee.class);
         List<Employee> employees = query.list();
         tx.commit();
         session.close();
@@ -34,7 +35,7 @@ public class EmployeeDao {
     public List<Employee> findByName(String name) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = session.beginTransaction();
-        Query<Employee> query = (Query<Employee>) session.createQuery("FROM Employee WHERE name = :name");
+        Query<Employee> query = session.createQuery("FROM Employee WHERE name = :name", Employee.class);
         query.setParameter("name", name);
         List<Employee> employees = query.list();
         tx.commit();
@@ -42,11 +43,10 @@ public class EmployeeDao {
         return employees;
     }
 
-    public void create(String name, String surname, LocalDate birthdate) {
+    public void create(Employee emp) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
-        Employee emp = new Employee(name, surname, birthdate);
         session.save(emp);
         tx.commit();
         session.close();

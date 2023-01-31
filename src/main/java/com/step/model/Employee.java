@@ -3,6 +3,7 @@ package com.step.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "employee")
@@ -11,7 +12,7 @@ public class Employee implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(length = 70)
@@ -24,15 +25,23 @@ public class Employee implements Serializable {
     private LocalDate birthdate;
 
     @Column(precision = 6, scale = 2)
-    private Double salary; // 145.32
+    private Double salary;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Address address;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name="department_id")
+    private Department department;
 
     public Employee() {
     }
 
-    public Employee(String name, String surname, LocalDate birthdate) {
+    public Employee(String name, String surname, LocalDate birthdate, Double salary) {
         this.name = name;
         this.surname = surname;
         this.birthdate = birthdate;
+        this.salary = salary;
     }
 
     public Integer getId() {
@@ -75,6 +84,22 @@ public class Employee implements Serializable {
         this.salary = salary;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
     @Override
     public String toString() {
         return "Employee{" +
@@ -83,6 +108,7 @@ public class Employee implements Serializable {
                 ", surname='" + surname + '\'' +
                 ", birthdate=" + birthdate +
                 ", salary=" + salary +
+                ", address=" + address +
                 '}';
     }
 }
